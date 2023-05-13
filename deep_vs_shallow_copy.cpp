@@ -1,56 +1,106 @@
 /*
-Write a code for deep copy and shallow copy in
+Write a code for deep copy and shallow copy in two separate classes and show the difference between them.
 */
 
 #include <iostream>
+
 using namespace std;
 
-class Shallow
+class ShallowCopy
 {
 private:
     int *data;
 
 public:
-    void set_data_value(int d) { *data = d; }
-    int get_data_value() { return *data; }
-    // Constructor
-    Shallow(int);
-    // Copy Constructor
-    Shallow(const Shallow &);
-    // Destructor
-    ~Shallow();
+    ShallowCopy(int d)
+    {
+        data = new int;
+        *data = d;
+    }
+
+    ShallowCopy(const ShallowCopy &source)
+        : data(source.data)
+    {
+        cout << "Shallow Copy Constructor - shallow copy" << endl;
+    }
+
+    ~ShallowCopy()
+    {
+        delete data;
+        cout << "Destructor freeing data" << endl;
+    }
+
+    void setData(int d)
+    {
+        *data = d;
+    }
+
+    int getData()
+    {
+        return *data;
+    }
 };
 
-Shallow::Shallow(int d)
+class DeepCopy
 {
-    data = new int;
-    *data = d;
-}
+private:
+    int *data;
+    
+public:
 
-Shallow::Shallow(const Shallow &source)
-    : data(source.data)
-{
-    cout << "Copy constructor - shallow copy" << endl;
-}
+    DeepCopy(int d)
+    {
+        data = new int;
+        *data = d;
+    }
 
-Shallow::~Shallow()
-{
-    delete data;
-    cout << "Destructor freeing data" << endl;
-}
+    DeepCopy(const DeepCopy &source)
+    {
+        data = new int;
+        *data = *source.data;
+        cout << "Deep Copy Constructor - deep copy" << endl;
+    }
 
-void display_shallow(Shallow s)
-{
-    cout << s.get_data_value() << endl;
-}
+    ~DeepCopy()
+    {
+        delete data;
+        cout << "Destructor freeing data" << endl;
+    }
+
+    void setData(int d)
+    {
+        *data = d;
+    }
+
+    int getData()
+    {
+        return *data;
+    }
+};
 
 int main()
 {
-    Shallow obj1{100};
-    display_shallow(obj1);
+    ShallowCopy obj1(100);
+    ShallowCopy obj2(obj1);
 
-    Shallow obj2{obj1};
-    obj2.set_data_value(1000);
+    cout << "obj1: " << obj1.getData() << endl;
+    cout << "obj2: " << obj2.getData() << endl;
+
+    obj1.setData(1000);
+
+    cout << "obj1: " << obj1.getData() << endl;
+    cout << "obj2: " << obj2.getData() << endl;
+
+    DeepCopy obj3(100);
+    DeepCopy obj4(obj3);
+
+    cout << "obj3: " << obj3.getData() << endl;
+    cout << "obj4: " << obj4.getData() << endl;
+
+    obj3.setData(1000);
+
+    cout << "obj3: " << obj3.getData() << endl;
+    cout << "obj4: " << obj4.getData() << endl;
 
     return 0;
 }
