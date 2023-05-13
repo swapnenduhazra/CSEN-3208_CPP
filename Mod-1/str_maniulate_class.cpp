@@ -30,12 +30,16 @@ public:
     }
 
     int xstrlen (char *);
-    char *xstrcpy (char *, char *);
-    char *xstrcat (char *, char *);
     int xstrcmp (char *, char *);
-    char *xstrrev (char *);
-    char *xstrupr (char *);
-    char *xstrlwr (char *);
+    void xstrcpy (char *, char *);
+    void xstrcat (char *, char *);
+    void xstrrev (char *);
+    void xstrupr (char *);
+    void xstrlwr (char *);
+    void display ()
+    {
+        cout << str << endl;
+    }
 };
 
 int StringManipulation::xstrlen (char *s)
@@ -48,112 +52,126 @@ int StringManipulation::xstrlen (char *s)
     return i;
 }
 
-char *StringManipulation::xstrcpy (char *s1, char *s2)
-{
-    int i = 0;
-    while (s2[i] != '\0')
-    {
-        s1[i] = s2[i];
-        i++;
-    }
-    s1[i] = '\0';
-    return s1;
-}
-
-char *StringManipulation::xstrcat (char *s1, char *s2)
-{
-    int i = 0, j = 0;
-    while (s1[i] != '\0')
-    {
-        i++;
-    }
-    while (s2[j] != '\0')
-    {
-        s1[i] = s2[j];
-        i++;
-        j++;
-    }
-    s1[i] = '\0';
-    return s1;
-}
-
 int StringManipulation::xstrcmp (char *s1, char *s2)
 {
-    int i = 0;
-    while (s1[i] != '\0' && s2[i] != '\0')
+   while(*s1!='\0')
     {
-        if (s1[i] != s2[i])
-        {
-            return s1[i] - s2[i];
-        }
-        i++;
+        if(*s1!=*s2)
+            break;
+        s1++;
+        s2++;
     }
-    return 0;
+
+    if(*s1==*s2)
+        return 0;
+    else if(*s1>*s2)
+        return 1;
+    else
+        return -1;
 }
 
-char *StringManipulation::xstrrev (char *s)
+void StringManipulation::xstrcpy (char *s1, char *s2)
 {
-    int i = 0, j = 0;
-    char temp;
+    while (*s2 != '\0')
+    {
+        *s1 = *s2;
+        s1++;
+        s2++;
+    }
+    *s1 = '\0';
+}
+
+void StringManipulation::xstrcat (char *s1, char *s2)
+{
+    while (*s1 != '\0')
+    {
+        s1++;
+    }
+    while (*s2 != '\0')
+    {
+        *s1 = *s2;
+        s1++;
+        s2++;
+    }
+    *s1 = '\0';
+}
+
+void StringManipulation::xstrrev (char *s)
+{
+    int i = 0;
     while (s[i] != '\0')
     {
         i++;
     }
     i--;
-    while (i > j)
+    int j = 0;
+    while (j < i)
     {
-        temp = s[i];
+        char temp = s[i];
         s[i] = s[j];
         s[j] = temp;
         i--;
         j++;
     }
-    return s;
 }
 
-char *StringManipulation::xstrupr (char *s)
+void StringManipulation::xstrupr (char *s)
 {
-    int i = 0;
-    while (s[i] != '\0')
+    while (*s != '\0')
     {
-        if (s[i] >= 'a' && s[i] <= 'z')
+        if (*s >= 'a' && *s <= 'z')
         {
-            s[i] = s[i] - 32;
+            *s = *s - 32;
         }
-        i++;
+        s++;
     }
-    return s;
 }
 
-char *StringManipulation::xstrlwr (char *s)
+void StringManipulation::xstrlwr (char *s)
 {
-    int i = 0;
-    while (s[i] != '\0')
+    while (*s != '\0')
     {
-        if (s[i] >= 'A' && s[i] <= 'Z')
+        if (*s >= 'A' && *s <= 'Z')
         {
-            s[i] = s[i] + 32;
+            *s = *s + 32;
         }
-        i++;
+        s++;
     }
-    return s;
 }
 
 int main()
 {
     char s1[100], s2[100];
-    cout << "Enter the first string: ";
+    cout << "Enter string 1: ";
     cin >> s1;
-    cout << "Enter the second string: ";
+    cout << "Enter string 2: ";
     cin >> s2;
-    StringManipulation sm(s1);
-    cout << "Length of the first string: " << sm.xstrlen(s1) << endl;
-    cout << "Length of the second string: " << sm.xstrlen(s2) << endl;
-    cout << "Copying the second string to the first string: " << sm.xstrcpy(s1, s2) << endl;
-    cout << "Concatenating the first string with the second string: " << sm.xstrcat(s1, s2) << endl;
-    cout << "Comparing the first string with the second string: " << sm.xstrcmp(s1, s2) << endl;
-    cout << "Reversing the first string: " << sm.xstrrev(s1) << endl;
-    cout << "Converting the first string to uppercase: " << sm.xstrupr(s1) << endl;
-    cout << "Converting the first string to lowercase: " << sm.xstrlwr(s1) << endl;
+    StringManipulation sm1(s1);
+    StringManipulation sm2(s2);
+    cout << "Length of string 1: " << sm1.xstrlen(s1) << endl;
+    cout << "Length of string 2: " << sm2.xstrlen(s2) << endl;
+    cout << "Comparing string 1 and string 2: " << sm1.xstrcmp(s1, s2) << endl;
+    StringManipulation sm3(s1);
+    sm3.xstrcpy(s1, s2);
+    cout << "Copying string 2 to string 1: ";
+    sm3.display();
+    cout<<"Enter string 1: ";
+    cin>>s1;
+    StringManipulation sm4(s1);
+    sm4.xstrcat(s1, s2);
+    cout << "Concatenating string 1 and string 2: ";
+    sm4.display();
+    StringManipulation sm5(s1);
+    sm5.xstrrev(s1);
+    cout << "Reversing string 1: ";
+    sm5.display();
+    StringManipulation sm6(s1);
+    sm6.xstrupr(s1);
+    cout << "Converting string 1 to uppercase: ";
+    sm6.display();
+    StringManipulation sm7(s1);
+    sm7.xstrlwr(s1);
+    cout << "Converting string 1 to lowercase: ";
+    sm7.display();
     return 0;
 }
